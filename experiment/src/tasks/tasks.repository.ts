@@ -11,7 +11,7 @@ export interface TaskRepository extends Repository<Task> {
   getTask(getTaskDto: GetTasksFilterDto): Promise<Task[]>;
 }
 
-export const customTaskRepositoryMethods:Pick<TaskRepository,'createTask'|'getTask'> = {
+export const customTaskRepositoryMethods:Pick<TaskRepository,any> = {
    async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
     const { title, description } = createTaskDto;
     const task = this.create({
@@ -43,3 +43,4 @@ export const customTaskRepositoryMethods:Pick<TaskRepository,'createTask'|'getTa
 
 
 
+//Pick<TaskRepository,'createTask'|'getTask'> or any
