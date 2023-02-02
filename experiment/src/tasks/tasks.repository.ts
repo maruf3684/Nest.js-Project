@@ -27,8 +27,8 @@ export class TaskRepository extends Repository<Task> {
 
     return task;
   }
-  async getTask(createTaskDto: GetTasksFilterDto): Promise<Task[]> {
-    const {status,search}=createTaskDto;
+  async getTask(getTaskDto: GetTasksFilterDto): Promise<Task[]> {
+    const {status,search}=getTaskDto;
     const query = this.createQueryBuilder('task');
    
 
