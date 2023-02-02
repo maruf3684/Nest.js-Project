@@ -1,0 +1,8 @@
+create user database;
+add basic auth;
+add jwt auth;
+add bkash url payment;
+add redish;
+
+git project to follow
+https://github.com/lujakob/nestjs-realworld-example-app/blob/master/src/user/user.entity.ts

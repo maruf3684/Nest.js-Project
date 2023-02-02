@@ -1,0 +1,29 @@
+[1]For generating Migration File
+   npm run migration:generate "db/migrations/MigrationName"
+
+[2]For run Migration File
+   npm run migration:run
+
+[3]For generating Migration File
+   npm run migration:generate "db/migrations/NewMigrations"
+
+[4]For generating Migration File
+   npm run migration:generate "db/migrations/NewMigrations"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.....................................................................................
+Usefull Links
+Goood Tutorial
+https://www.youtube.com/watch?v=xzu3QXwo1BU&list=PL_cUvD4qzbkw-phjGK2qq0nQiG6gw1cKK
