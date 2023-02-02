@@ -1,4 +1,6 @@
-import { TaskRepository } from './tasks.repository';
+import {
+  customTaskRepositoryMethods,
+} from './tasks.repository';
 import { Task } from './task.entity';
 import { TasksService } from './tasks.service';
 import {
@@ -14,9 +16,18 @@ https://docs.nestjs.com/modules
 import { Module } from '@nestjs/common';
 import { TasksController } from './tasks.controller';
 
+let customTaskRepoConfig = {
+  provide: getRepositoryToken(Task),
+  inject: [getDataSourceToken()],
+  useFactory(dataSource: DataSource) {
+    // Override default repository for Task with a custom one
+    return dataSource.getRepository(Task).extend(customTaskRepositoryMethods);
+  },
+};
+
 @Module({
   imports: [TypeOrmModule.forFeature([Task])],
   controllers: [TasksController],
-  providers: [TaskRepository, TasksService],
+  providers: [customTaskRepoConfig, TasksService],
 })
 export class TasksModule {}

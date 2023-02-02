@@ -5,18 +5,14 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 
+export interface TaskRepository extends Repository<Task> {
+  this: Repository<Task>;
+  createTask(createTaskDto: CreateTaskDto): Promise<Task>;
+  getTask(getTaskDto: GetTasksFilterDto): Promise<Task[]>;
+}
 
-export class TaskRepository extends Repository<Task> {
-  constructor(
-    @InjectRepository(Task) private taskRepository: Repository<Task>,
-  ) {
-    super(
-      taskRepository.target,
-      taskRepository.manager,
-      taskRepository.queryRunner,
-    );
-  }
-  async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
+export const customTaskRepositoryMethods:Pick<TaskRepository,'createTask'|'getTask'> = {
+   async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
     const { title, description } = createTaskDto;
     const task = this.create({
       title,
@@ -26,9 +22,10 @@ export class TaskRepository extends Repository<Task> {
     await this.save(task);
 
     return task;
-  }
-  async getTask(createTaskDto: GetTasksFilterDto): Promise<Task[]> {
-    const {status,search}=createTaskDto;
+  },
+
+  async getTask(getTaskDto: GetTasksFilterDto): Promise<Task[]> {
+    const {status,search}=getTaskDto;
     const query = this.createQueryBuilder('task');
    
 
@@ -41,5 +38,8 @@ export class TaskRepository extends Repository<Task> {
     const tasks = await query.getMany();
     return tasks;
   }
-}
+};
+
+
+
 
