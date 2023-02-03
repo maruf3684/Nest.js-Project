@@ -9,6 +9,7 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
+import { AuthModule } from './auth/auth.module';
 
 let Config_Env: DynamicModule = ConfigModule.forRoot({
   isGlobal: true,
@@ -19,7 +20,7 @@ let Load_TypeOrm: DynamicModule = TypeOrmModule.forRootAsync({
 });
 
 @Module({
-  imports: [Config_Env, Load_TypeOrm, UserModule, TasksModule],
+  imports: [Config_Env, Load_TypeOrm, UserModule, TasksModule, AuthModule],
   controllers: [],
   providers: [],
 })
