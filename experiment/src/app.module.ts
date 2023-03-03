@@ -11,13 +11,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { AuthModule } from './auth/auth.module';
 
+//load .env config file
 let Config_Env: DynamicModule = ConfigModule.forRoot({
   isGlobal: true,
 });
 
+//load typeorm
 let Load_TypeOrm: DynamicModule = TypeOrmModule.forRootAsync({
   useClass: TypeOrmConfigService,
 });
+
 
 @Module({
   imports: [Config_Env, Load_TypeOrm, UserModule, TasksModule, AuthModule],
@@ -27,3 +30,4 @@ let Load_TypeOrm: DynamicModule = TypeOrmModule.forRootAsync({
 export class AppModule {
   constructor(private dataSource: DataSource) {}
 }
+

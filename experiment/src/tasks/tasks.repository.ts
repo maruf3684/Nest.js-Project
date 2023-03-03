@@ -1,3 +1,4 @@
+import { Customer } from 'src/auth/customer.entity';
 import { TaskStatus } from './task-status.enum';
 import { Repository, DataSource } from 'typeorm';
 import { Task } from './task.entity';
@@ -19,27 +20,29 @@ export class TaskRepository extends Repository<Task> {
   }
 
 
-  async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
+  async createTask(createTaskDto: CreateTaskDto, user:Customer): Promise<Task> {
     const { title, description } = createTaskDto;
     const task = this.create({
       title,
       description,
       status: TaskStatus.OPEN,
+      customer:user
     });
     await this.save(task);
 
     return task;
   }
-  async getTask(getTaskDto: GetTasksFilterDto): Promise<Task[]> {
+  async getTask(getTaskDto: GetTasksFilterDto,user:Customer): Promise<Task[]> {
     const {status,search}=getTaskDto;
     const query = this.createQueryBuilder('task');
+    query.where({customer:user})
    
 
     if(status){
        query.andWhere('task.status = :status',{status:status})
     }
     if(search){
-       query.andWhere('LOWER(task.title) LIKE LOWER(:search) OR LOWER(task.description) LIKE LOWER(:search)',{search:`%${search}%`})
+       query.andWhere('(LOWER(task.title) LIKE LOWER(:search) OR LOWER(task.description) LIKE LOWER(:search))',{search:`%${search}%`})
     }
     const tasks = await query.getMany();
     return tasks;

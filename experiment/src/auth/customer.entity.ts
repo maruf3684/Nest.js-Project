@@ -1,6 +1,13 @@
 import { IsEmail } from 'class-validator';
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import * as argon2 from 'argon2';
+import { Task } from 'src/tasks/task.entity';
 
 @Entity()
 export class Customer {
@@ -10,15 +17,18 @@ export class Customer {
   @Column()
   username: string;
 
-  @Column()
+  @Column({ unique: true })
   @IsEmail()
   email: string;
 
   @Column()
   password: string;
 
-  @BeforeInsert()
-  async hashPassword() {
-    this.password = await argon2.hash(this.password);
-  }
+  @OneToMany((_type) => Task, (task) => task.customer, { eager: true })
+  task: Task[];
+
+  // @BeforeInsert()
+  // async hashPassword() {
+  //   this.password = await argon2.hash(this.password);
+  // }
 }

@@ -25,7 +25,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       migrationsTableName: 'typeorm_migrations',
       autoLoadEntities : true,
       logger: 'file',
-      //synchronize: true, // never use TRUE in production!
+      synchronize: true, // never use TRUE in production!
     };
   }
 

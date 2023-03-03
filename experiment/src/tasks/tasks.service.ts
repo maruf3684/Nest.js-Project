@@ -1,3 +1,4 @@
+import { Customer } from 'src/auth/customer.entity';
 import { TaskRepository } from './tasks.repository';
 import { CreateTaskDto } from './dto/create-task.dto';
 
@@ -14,10 +15,11 @@ import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 export class TasksService {
   constructor(private readonly taskRepository: TaskRepository) {}
 
-  public async getTaskById(id: string): Promise<Task> {
+  public async getTaskById(id: string,user:Customer): Promise<Task> {
     const found = await this.taskRepository.findOne({
       where: {
         id: id,
+        customer:user
       },
     });
 
@@ -28,25 +30,25 @@ export class TasksService {
     return found;
   }
 
-  public async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
-    return this.taskRepository.createTask(createTaskDto);
+  public async createTask(createTaskDto: CreateTaskDto,user:Customer): Promise<Task> {
+    return this.taskRepository.createTask(createTaskDto,user);
   }
 
-  public async deleteTask(id: string): Promise<void> {
-    const result = await this.taskRepository.delete(id);
+  public async deleteTask(id: string,user:Customer): Promise<void> {
+    const result = await this.taskRepository.delete({id:id,customer:user});
     if (result.affected === 0) {
       throw new NotFoundException(`Task with ID "${id} not found"`);
     }
   }
 
-  public async updateTaskStatus(id: string, status: TaskStatus): Promise<Task> {
-    const task = await this.getTaskById(id);
+  public async updateTaskStatus(id: string, status: TaskStatus , user:Customer): Promise<Task> {
+    const task = await this.getTaskById(id,user);
     task.status = status;
     await this.taskRepository.save(task);
     return task;
   }
 
-  public async getTasks(filterDto: GetTasksFilterDto): Promise<Task[]> {
-    return this.taskRepository.getTask(filterDto);
+  public async getTasks(filterDto: GetTasksFilterDto,user:Customer): Promise<Task[]> {
+    return this.taskRepository.getTask(filterDto,user);
   }
 }
